@@ -1,0 +1,1 @@
+bemenu-run --fn monospace,13 -H 27 --tb "#000000" --fb "#000000" --cb "#000000" --nb "#000000" --hb "#000000" --fbb "#000000" --sb "#000000" --ab "#000000" --scb "#000000" --nf "#ffffff" --af "#ffffff" --ff "#ffffff" --cf "#ffffff"

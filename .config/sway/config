@@ -1,0 +1,237 @@
+## Sway config
+
+#-------------------- Hardware --------------------#
+
+# Input
+input * {
+    xkb_layout gb,es
+    repeat_delay 250
+    repeat_rate 50
+    xkb_options "caps:escape"
+}
+
+font pango:Inconsolata LGC Nerd Font Mono 11
+
+# Turn off screen on lid closed                                                                       
+set $laptop eDP-1                                                                                       
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
+# No mouse tiling 
+tiling_drag disable
+
+#-------------------- Keybindings --------------------#
+
+## Window keybindings
+# Set window movement keys
+bindsym Mod1+h focus left
+bindsym Mod1+j focus down
+bindsym Mod1+k focus up
+bindsym Mod1+l focus right
+
+# Move the focused window with the same, but add Shift
+bindsym Mod1+Shift+h move left
+bindsym Mod1+Shift+j move down
+bindsym Mod1+Shift+k move up
+bindsym Mod1+Shift+l move right
+
+# Layout
+bindsym Mod1+b splith
+bindsym Mod1+v splitv
+
+# Switch the current container between different layout styles
+bindsym Mod1+1 layout stacking
+bindsym Mod1+2 layout tabbed
+bindsym Mod1+3 layout toggle split
+
+# Make the current focus fullscreen
+bindsym Mod1+z fullscreen
+
+# Move focus to the parent container
+#bindsym Mod1+p focus parent
+#bindsym Mod1+m focus child
+
+# Move the currently focused window to the scratchpad
+bindsym Mod1+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym Mod1+minus scratchpad show
+
+# Resizing containers:
+mode "resize" {
+    bindsym l resize shrink width 10px
+    bindsym j resize grow height 10px
+    bindsym k resize shrink height 10px
+    bindsym h resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym Mod1+r mode "resize"
+
+# # Swappy mode (to swap windows)
+# mode "swap" {
+# 	# switch to workspace
+# 	bindsym Mod1+1 workspace 1
+# 	bindsym Mod1+2 workspace 2
+# 	bindsym Mod1+3 workspace 3
+# 	bindsym Mod1+4 workspace 4
+# 	bindsym Mod1+5 workspace 5
+# 
+# 	# change focus
+# 	bindsym Mod1+h focus left
+# 	bindsym Mod1+j focus down
+# 	bindsym Mod1+k focus up
+# 	bindsym Mod1+l focus right
+# 
+# 	# change focus (without mod)
+# 	bindsym h focus left
+# 	bindsym j focus down
+# 	bindsym k focus up
+# 	bindsym l focus right
+# 
+# 	bindsym Return swap container with mark "swapee"; unmark "swapee"; mode "default";
+# 	bindsym Escape unmark "swapee"; mode "default";
+# }
+# bindsym Mod1+t mark --add "swapee"; mode "swap"
+
+## Workspaces keybindings
+bindsym Mod1+a workspace number 1
+bindsym Mod1+s workspace number 2
+bindsym Mod1+d workspace number 3
+bindsym Mod1+f workspace number 4
+bindsym Mod1+g workspace number 5
+
+bindsym Mod1+Shift+a move container to workspace number 1
+bindsym Mod1+Shift+s move container to workspace number 2
+bindsym Mod1+Shift+d move container to workspace number 3
+bindsym Mod1+Shift+f move container to workspace number 4
+bindsym Mod1+Shift+g move container to workspace number 5
+
+## Action keybindings
+
+# Kill 
+bindsym Mod1+q kill
+
+# Lock screen
+bindsym Mod1+Escape exec swaylock
+
+# Lock screen and suspend
+bindsym Mod1+Shift+Escape exec swaylock --daemonize & systemctl suspend
+
+# Reload the configuration file
+bindsym Mod1+Shift+c reload
+
+# Drag floating windows by holding down Mod1 and left mouse button.
+floating_modifier Mod1 normal
+
+# Exit sway (logs you out of your Wayland session)
+bindsym Mod1+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Change keyboard layout
+bindsym Mod1+Tab input "1:1:AT_Translated_Set_2_keyboard" xkb_switch_layout next 
+
+# Passthrough mode
+mode passthrough {
+	bindsym Mod1+Shift+q mode default
+}
+bindsym Mod1+Shift+q mode passthrough
+
+#-------------------- Runners -------------------- #
+
+# Clear all notifications
+bindsym Mod1+n exec dunstctl close
+
+# Start a terminal
+bindsym Mod1+Return exec foot
+
+# Take screenshot (remember to install grim, slurp and swappy)
+bindsym Print exec grim -g "$(slurp)" - | swappy -f -
+
+# Sound and brightness
+# Sink volume raise optionally with --device
+bindsym XF86AudioRaiseVolume exec swayosd-client --output-volume raise
+# Sink volume lower optionally with --device
+bindsym XF86AudioLowerVolume exec  swayosd-client --output-volume lower
+# Sink volume toggle mute
+bindsym XF86AudioMute exec swayosd-client --output-volume mute-toggle
+# Source volume toggle mute
+bindsym XF86AudioMicMute exec swayosd-client --input-volume mute-toggle
+# Brightness raise
+bindsym XF86MonBrightnessUp exec swayosd-client --brightness raise
+# Brightness lower
+bindsym XF86MonBrightnessDown exec swayosd-client --brightness lower
+#-------------------- Menus -------------------- #
+
+# Application menu
+#bindsym Mod1+p exec wmenu-run -i -n ffffff -N 000000 -M 000000 -f "monospace, 12" -p "Run:" | xargs swaymsg exec --
+bindsym Mod1+p exec ~/.config/sway/bmenu 
+
+#-------------------- Window settings --------------------#
+
+# switch to workspace with urgent window
+for_window [urgent="latest"] focus
+
+# Floating windows
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [instance="update_installer"] floating enable	
+for_window [app_id="nm-connection-editor$"] floating enable
+for_window [app_id="nm-openconnect-auth-dialog"] floating enable
+for_window [app_id="wdisplays"] floating enable
+
+
+### Autoexec
+
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec hash dbus-update-activation-environment 2>/dev/null && \
+dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+exec /usr/lib/xdg-desktop-portal-wlr
+
+# Restart everything when sway is restarted. This avoids issues with kanshi for example.
+# Kanshi
+exec_always sh -c "killall kanshi; kanshi &"
+
+# Notifications
+exec_always sh -c "killall dunst; dunst &"
+
+# Status bar
+exec_always sh -c "killall waybar; waybar &"
+
+# nm-applet
+exec_always sh -c "killall nm-applet; nm-applet &"
+
+# clipmon
+exec_always sh -c "killall clipmon; clipmon &"
+
+#-------------------- Themeables --------------------#
+output * bg #bfc7ca solid_color
+
+# Gaps' default size & behavior:
+gaps inner 5
+smart_gaps on
+
+# Borders:
+default_border normal 3
+smart_borders on
+
+#bar {
+#    bindsym button1 nop
+#   bindsym button2 nop
+#    bindsym button3 nop
+#    bindsym button4 nop
+#    bindsym button5 nop
+#    status_command sway-musli
+#    position bottom
+#    colors {
+#        statusline #ffffff
+#        background #000000
+#    }
+}
+include /etc/sway/config.d/*

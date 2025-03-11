@@ -1,0 +1,535 @@
+# Sanity is for the weak
+profile single {
+output eDP-1 enable
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-1'
+exec swaymsg workspace 4, move workspace to output 'DP-1'
+exec swaymsg workspace 5, move workspace to output 'DP-1'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-2'
+exec swaymsg workspace 4, move workspace to output 'DP-2'
+exec swaymsg workspace 5, move workspace to output 'DP-2'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-3'
+exec swaymsg workspace 4, move workspace to output 'DP-3'
+exec swaymsg workspace 5, move workspace to output 'DP-3'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-4 enable
+exec swaymsg workspace 1, move workspace to output 'DP-4'
+exec swaymsg workspace 2, move workspace to output 'DP-4'
+exec swaymsg workspace 3, move workspace to output 'DP-4'
+exec swaymsg workspace 4, move workspace to output 'DP-4'
+exec swaymsg workspace 5, move workspace to output 'DP-4'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-5 enable
+exec swaymsg workspace 1, move workspace to output 'DP-5'
+exec swaymsg workspace 2, move workspace to output 'DP-5'
+exec swaymsg workspace 3, move workspace to output 'DP-5'
+exec swaymsg workspace 4, move workspace to output 'DP-5'
+exec swaymsg workspace 5, move workspace to output 'DP-5'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-6 enable
+exec swaymsg workspace 1, move workspace to output 'DP-6'
+exec swaymsg workspace 2, move workspace to output 'DP-6'
+exec swaymsg workspace 3, move workspace to output 'DP-6'
+exec swaymsg workspace 4, move workspace to output 'DP-6'
+exec swaymsg workspace 5, move workspace to output 'DP-6'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-7'
+exec swaymsg workspace 2, move workspace to output 'DP-7'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-8'
+exec swaymsg workspace 2, move workspace to output 'DP-8'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-9'
+exec swaymsg workspace 2, move workspace to output 'DP-9'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-2 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-2'
+exec swaymsg workspace 4, move workspace to output 'DP-2'
+exec swaymsg workspace 5, move workspace to output 'DP-2'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-3 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-3'
+exec swaymsg workspace 4, move workspace to output 'DP-3'
+exec swaymsg workspace 5, move workspace to output 'DP-3'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-4 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-4'
+exec swaymsg workspace 4, move workspace to output 'DP-4'
+exec swaymsg workspace 5, move workspace to output 'DP-4'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-5 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-5'
+exec swaymsg workspace 4, move workspace to output 'DP-5'
+exec swaymsg workspace 5, move workspace to output 'DP-5'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-6 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-6'
+exec swaymsg workspace 4, move workspace to output 'DP-6'
+exec swaymsg workspace 5, move workspace to output 'DP-6'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-1 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-1'
+exec swaymsg workspace 2, move workspace to output 'DP-1'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-3 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-3'
+exec swaymsg workspace 4, move workspace to output 'DP-3'
+exec swaymsg workspace 5, move workspace to output 'DP-3'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-4 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-4'
+exec swaymsg workspace 4, move workspace to output 'DP-4'
+exec swaymsg workspace 5, move workspace to output 'DP-4'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-5 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-5'
+exec swaymsg workspace 4, move workspace to output 'DP-5'
+exec swaymsg workspace 5, move workspace to output 'DP-5'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-6 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-6'
+exec swaymsg workspace 4, move workspace to output 'DP-6'
+exec swaymsg workspace 5, move workspace to output 'DP-6'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-2 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-2'
+exec swaymsg workspace 2, move workspace to output 'DP-2'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+output DP-4 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-4'
+exec swaymsg workspace 4, move workspace to output 'DP-4'
+exec swaymsg workspace 5, move workspace to output 'DP-4'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+output DP-5 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-5'
+exec swaymsg workspace 4, move workspace to output 'DP-5'
+exec swaymsg workspace 5, move workspace to output 'DP-5'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+output DP-6 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-6'
+exec swaymsg workspace 4, move workspace to output 'DP-6'
+exec swaymsg workspace 5, move workspace to output 'DP-6'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-3 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-3'
+exec swaymsg workspace 2, move workspace to output 'DP-3'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-4 enable
+output DP-5 enable
+exec swaymsg workspace 1, move workspace to output 'DP-4'
+exec swaymsg workspace 2, move workspace to output 'DP-4'
+exec swaymsg workspace 3, move workspace to output 'DP-5'
+exec swaymsg workspace 4, move workspace to output 'DP-5'
+exec swaymsg workspace 5, move workspace to output 'DP-5'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-4 enable
+output DP-6 enable
+exec swaymsg workspace 1, move workspace to output 'DP-4'
+exec swaymsg workspace 2, move workspace to output 'DP-4'
+exec swaymsg workspace 3, move workspace to output 'DP-6'
+exec swaymsg workspace 4, move workspace to output 'DP-6'
+exec swaymsg workspace 5, move workspace to output 'DP-6'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-4 enable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-4'
+exec swaymsg workspace 2, move workspace to output 'DP-4'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-4 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-4'
+exec swaymsg workspace 2, move workspace to output 'DP-4'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-4 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-4'
+exec swaymsg workspace 2, move workspace to output 'DP-4'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-5 enable
+output DP-6 enable
+exec swaymsg workspace 1, move workspace to output 'DP-5'
+exec swaymsg workspace 2, move workspace to output 'DP-5'
+exec swaymsg workspace 3, move workspace to output 'DP-6'
+exec swaymsg workspace 4, move workspace to output 'DP-6'
+exec swaymsg workspace 5, move workspace to output 'DP-6'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-5 enable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-5'
+exec swaymsg workspace 2, move workspace to output 'DP-5'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-5 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-5'
+exec swaymsg workspace 2, move workspace to output 'DP-5'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-5 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-5'
+exec swaymsg workspace 2, move workspace to output 'DP-5'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-6 enable
+output DP-7 enable
+exec swaymsg workspace 1, move workspace to output 'DP-6'
+exec swaymsg workspace 2, move workspace to output 'DP-6'
+exec swaymsg workspace 3, move workspace to output 'DP-7'
+exec swaymsg workspace 4, move workspace to output 'DP-7'
+exec swaymsg workspace 5, move workspace to output 'DP-7'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-6 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-6'
+exec swaymsg workspace 2, move workspace to output 'DP-6'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-6 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-6'
+exec swaymsg workspace 2, move workspace to output 'DP-6'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-7 enable
+output DP-8 enable
+exec swaymsg workspace 1, move workspace to output 'DP-7'
+exec swaymsg workspace 2, move workspace to output 'DP-7'
+exec swaymsg workspace 3, move workspace to output 'DP-8'
+exec swaymsg workspace 4, move workspace to output 'DP-8'
+exec swaymsg workspace 5, move workspace to output 'DP-8'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-7 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-7'
+exec swaymsg workspace 2, move workspace to output 'DP-7'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
+
+profile {
+output eDP-1 disable
+output DP-8 enable
+output DP-9 enable
+exec swaymsg workspace 1, move workspace to output 'DP-8'
+exec swaymsg workspace 2, move workspace to output 'DP-8'
+exec swaymsg workspace 3, move workspace to output 'DP-9'
+exec swaymsg workspace 4, move workspace to output 'DP-9'
+exec swaymsg workspace 5, move workspace to output 'DP-9'
+exec pkill waybar; waybar &
+}
