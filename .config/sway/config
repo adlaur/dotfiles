@@ -1,5 +1,17 @@
 ## Sway config
-
+## Install:
+# - swaylock, swayidle, swaybg as basic sway utils
+# - i3status-rs for swaybar
+# - wmenu: https://codeberg.org/adnano/wmenu as application menu
+# - foot as terminal
+# - slurp, grim, swappy for screenshots
+# - brightnessctl to manage screen brightness
+# - pamixer to change audio levels
+# - wob to get a basic bar when changing audio levels or brightness
+# - xdg-desktop-portal-wlr because reasons
+# - kanshi to manage screen on/off patterns
+# - mako to show notifications
+# - clipmon to manage the clipboard
 #-------------------- Hardware --------------------#
 
 # Input
@@ -9,8 +21,6 @@ input * {
     repeat_rate 50
     xkb_options "caps:escape"
 }
-
-font pango:Inconsolata LGC Nerd Font Mono 11
 
 # Turn off screen on lid closed                                                                       
 set $laptop eDP-1                                                                                       
@@ -28,6 +38,8 @@ bindsym Mod1+h focus left
 bindsym Mod1+j focus down
 bindsym Mod1+k focus up
 bindsym Mod1+l focus right
+# Useful with tabbed container, will only switch to tabs unless you leave the tabbed container
+bindsym Mod1+Tab focus right
 
 # Move the focused window with the same, but add Shift
 bindsym Mod1+Shift+h move left
@@ -40,9 +52,9 @@ bindsym Mod1+b splith
 bindsym Mod1+v splitv
 
 # Switch the current container between different layout styles
-bindsym Mod1+1 layout stacking
-bindsym Mod1+2 layout tabbed
-bindsym Mod1+3 layout toggle split
+#bindsym Mod1+1 layout stacking
+bindsym Mod1+t split vertical, layout tabbed
+bindsym Mod1+y layout toggle split
 
 # Make the current focus fullscreen
 bindsym Mod1+z fullscreen
@@ -70,32 +82,6 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym Mod1+r mode "resize"
-
-# # Swappy mode (to swap windows)
-# mode "swap" {
-# 	# switch to workspace
-# 	bindsym Mod1+1 workspace 1
-# 	bindsym Mod1+2 workspace 2
-# 	bindsym Mod1+3 workspace 3
-# 	bindsym Mod1+4 workspace 4
-# 	bindsym Mod1+5 workspace 5
-# 
-# 	# change focus
-# 	bindsym Mod1+h focus left
-# 	bindsym Mod1+j focus down
-# 	bindsym Mod1+k focus up
-# 	bindsym Mod1+l focus right
-# 
-# 	# change focus (without mod)
-# 	bindsym h focus left
-# 	bindsym j focus down
-# 	bindsym k focus up
-# 	bindsym l focus right
-# 
-# 	bindsym Return swap container with mark "swapee"; unmark "swapee"; mode "default";
-# 	bindsym Escape unmark "swapee"; mode "default";
-# }
-# bindsym Mod1+t mark --add "swapee"; mode "swap"
 
 ## Workspaces keybindings
 bindsym Mod1+a workspace number 1
@@ -131,18 +117,15 @@ floating_modifier Mod1 normal
 bindsym Mod1+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
 # Change keyboard layout
-bindsym Mod1+Tab input "1:1:AT_Translated_Set_2_keyboard" xkb_switch_layout next 
+bindsym Mod1+n input "1:1:AT_Translated_Set_2_keyboard" xkb_switch_layout next 
 
-# Passthrough mode
-mode passthrough {
-	bindsym Mod1+Shift+q mode default
-}
-bindsym Mod1+Shift+q mode passthrough
+## Passthrough mode
+#mode passthrough {
+#	bindsym Mod1+Shift+q mode default
+#}
+#bindsym Mod1+Shift+q mode passthrough
 
 #-------------------- Runners -------------------- #
-
-# Clear all notifications
-bindsym Mod1+n exec dunstctl close
 
 # Start a terminal
 bindsym Mod1+Return exec foot
@@ -150,24 +133,17 @@ bindsym Mod1+Return exec foot
 # Take screenshot (remember to install grim, slurp and swappy)
 bindsym Print exec grim -g "$(slurp)" - | swappy -f -
 
-# Sound and brightness
-# Sink volume raise optionally with --device
-bindsym XF86AudioRaiseVolume exec swayosd-client --output-volume raise
-# Sink volume lower optionally with --device
-bindsym XF86AudioLowerVolume exec  swayosd-client --output-volume lower
-# Sink volume toggle mute
-bindsym XF86AudioMute exec swayosd-client --output-volume mute-toggle
-# Source volume toggle mute
-bindsym XF86AudioMicMute exec swayosd-client --input-volume mute-toggle
-# Brightness raise
-bindsym XF86MonBrightnessUp exec swayosd-client --brightness raise
-# Brightness lower
-bindsym XF86MonBrightnessDown exec swayosd-client --brightness lower
+# Sound and brightness (wob used for bar)
+bindsym XF86AudioRaiseVolume exec pamixer -ui 2 && pamixer --get-volume > $WOBSOCK
+bindsym XF86AudioLowerVolume exec pamixer -ud 2 && pamixer --get-volume > $WOBSOCK
+bindsym XF86AudioMute exec pamixer --toggle-mute && ( [ "$(pamixer --get-mute)" = "true" ] && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+bindsym XF86MonBrightnessUp exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
 #-------------------- Menus -------------------- #
 
 # Application menu
-#bindsym Mod1+p exec wmenu-run -i -n ffffff -N 000000 -M 000000 -f "monospace, 12" -p "Run:" | xargs swaymsg exec --
-bindsym Mod1+p exec ~/.config/sway/bmenu 
+# bindsym Mod1+p exec wmenu-run -i -n ffffff -N 000000 -M 000000 -f "monospace, 13" -p "Run:" 
+bindsym Mod1+p exec wmenu-run -f "monospace, 13"
 
 #-------------------- Window settings --------------------#
 
@@ -189,28 +165,29 @@ for_window [app_id="wdisplays"] floating enable
 
 ### Autoexec
 
+# Session blurb
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec hash dbus-update-activation-environment 2>/dev/null && \
 dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
 exec /usr/lib/xdg-desktop-portal-wlr
+
+# wob
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+exec rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
 
 # Restart everything when sway is restarted. This avoids issues with kanshi for example.
 # Kanshi
 exec_always sh -c "killall kanshi; kanshi &"
 
 # Notifications
-exec_always sh -c "killall dunst; dunst &"
-
-# Status bar
-exec_always sh -c "killall waybar; waybar &"
-
-# nm-applet
-exec_always sh -c "killall nm-applet; nm-applet &"
+exec_always sh -c "killall mako; mako &"
 
 # clipmon
 exec_always sh -c "killall clipmon; clipmon &"
 
 #-------------------- Themeables --------------------#
+#font pango:Inconsolata LGC Nerd Font Mono 11
+
 output * bg #bfc7ca solid_color
 
 # Gaps' default size & behavior:
@@ -221,17 +198,19 @@ smart_gaps on
 default_border normal 3
 smart_borders on
 
-#bar {
-#    bindsym button1 nop
-#   bindsym button2 nop
-#    bindsym button3 nop
-#    bindsym button4 nop
-#    bindsym button5 nop
-#    status_command sway-musli
-#    position bottom
-#    colors {
-#        statusline #ffffff
-#        background #000000
-#    }
+bar {
+    bindsym button1 nop
+    bindsym button2 nop
+    bindsym button3 nop
+    bindsym button4 nop
+    bindsym button5 nop
+    status_command ~/.cargo/bin/i3status-rs
+    position top
+    colors {
+       statusline #ffffff
+       background #323232
+       inactive_workspace #323232 #323232 #5c5c5c
+       active_workspace #323232 #323232 #5c5c5c
+    }
 }
 include /etc/sway/config.d/*

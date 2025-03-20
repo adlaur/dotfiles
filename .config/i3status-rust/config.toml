@@ -1,0 +1,31 @@
+[theme]
+theme = "native"
+
+[[block]]
+block = "keyboard_layout"
+format = "Keyboard: $layout "
+driver = "sway"
+
+[[block]]
+block = "sound"
+format = "Sound: $volume " 
+step_width = 1
+
+[[block]]
+block = "net"
+format = "Network: {$signal_strength $ssid |Wired connection}"
+
+[[block]]
+block = "battery"
+format = "Battery: $percentage "
+
+[[block]]
+block = "backlight"
+format = "Brightness: $brightness "
+device = "intel_backlight"
+step_width = 1
+
+[[block]]
+block = "time"
+interval = 5
+format = "Time: $timestamp.datetime(f:'%d/%m/%y %R') "
