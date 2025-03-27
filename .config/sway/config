@@ -47,22 +47,18 @@ bindsym Mod1+Shift+j move down
 bindsym Mod1+Shift+k move up
 bindsym Mod1+Shift+l move right
 
+# --- Layout
 # Layout
 bindsym Mod1+b splith
 bindsym Mod1+v splitv
-
-# Switch the current container between different layout styles
-#bindsym Mod1+1 layout stacking
-bindsym Mod1+t split vertical, layout tabbed
-bindsym Mod1+y layout toggle split
-
-# Make the current focus fullscreen
 bindsym Mod1+z fullscreen
+bindsym Mod1+w layout stacking
+bindsym Mod1+t layout tabbed
+bindsym Mod1+e layout toggle split
+bindsym Mod1+m focus parent
+bindsym Mod1+c focus child
 
-# Move focus to the parent container
-#bindsym Mod1+p focus parent
-#bindsym Mod1+m focus child
-
+# --- Scratchpad
 # Move the currently focused window to the scratchpad
 bindsym Mod1+Shift+minus move scratchpad
 
