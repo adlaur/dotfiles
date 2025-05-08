@@ -1,31 +1,52 @@
 [theme]
 theme = "native"
 
+[theme.overrides]
+separator = " "
+[icons]
+icons = "awesome6"
+
+[[block]]
+block = "notify"
+driver = "swaync"
+format = " $icon {($notification_count.eng(w:1)) |}"
+[[block.click]]
+button = "left"
+action = "show"
+
 [[block]]
 block = "keyboard_layout"
-format = "Keyboard: $layout "
+format = " $layout"
 driver = "sway"
+[block.mappings]
+"English (UK)" = "en"
+"Spanish (N/A)" = "es"
 
 [[block]]
 block = "sound"
-format = "Sound: $volume " 
+driver = "pulseaudio"
+format = " $icon $output_name{ $volume|} "
 step_width = 1
+[block.mappings]
+"alsa_output.usb-C-Media_Electronics_Inc._JPL-500S-USB-00.analog-stereo" = "Headphones"
+"alsa_output.pci-0000_00_1f.3.analog-stereo" = "Internal"
+"auto_null" = "None"
 
 [[block]]
 block = "net"
-format = "Network: {$signal_strength $ssid |Wired connection}"
+format = "$icon"
 
 [[block]]
 block = "battery"
-format = "Battery: $percentage "
+format = "$icon"
 
 [[block]]
 block = "backlight"
-format = "Brightness: $brightness "
+format = "$icon"
 device = "intel_backlight"
 step_width = 1
 
 [[block]]
 block = "time"
+format = "$timestamp"
 interval = 5
-format = "Time: $timestamp.datetime(f:'%d/%m/%y %R') "
