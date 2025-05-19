@@ -1,0 +1,852 @@
+#+Title: Init
+#+property: header-args :tangle init.el
+
+
+* Sources
+- https://github.com/hrs/sensible-defaults.el
+- https://codeberg.org/ashton314/emacs-bedrock/src/branch/main/init.el
+- https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+- https://github.com/jjuliano/sensible.emacs.d
+- https://old.reddit.com/r/emacs/comments/nr3cxv/what_are_your_very_useful_emacs_key_bindings_fast/
+- https://marek-g.github.io/posts/tips_and_tricks/emacs_on_android/
+- https://github.com/patrickt/minimal-emacs/blob/main/init.el
+- https://stackoverflow.com/questions/4191408/making-the-emacs-cursor-into-a-line
+- https://github.com/LionyxML/emacs-solo/blob/main/init.el
+
+* Initial stage
+Stuff that starts before anything else.
+
+**  Emacs settings
+Allow 20MB of memory (instead of 0.76MB) before calling garbage collection. This means GC runs less often, which speeds up some operations.
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold 20000000)
+#+end_src
+
+Make native compilation silent, so it doesn't report "errors" that don't mean anything to us. Copied from Protesilaos.
+#+begin_src emacs-lisp
+  ;; Make native compilation silent and prune its cache.
+(when (native-comp-available-p)
+  (setq native-comp-async-report-warnings-errors 'silent) ; Emacs 28 with native compilation
+  (setq native-compile-prune-cache t)) ; Emacs 29
+#+end_src
+
+** Android settings
+Set the path to include binaries in termux
+#+begin_src emacs-lisp
+  (when (string-equal system-type "android")
+  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
+    (setenv "PATH" (concat (getenv "PATH") ":" termuxpath))
+    (setq exec-path (append exec-path (list termuxpath)))))
+#+end_src
+
+
+
+* Package management
+** Initialise package and add extra repos to the repo list
+#+begin_src emacs-lisp
+  (require 'package)
+  (push '("melpa" . "https://melpa.org/packages/") package-archives)
+  (push '("melpa-stable" . "https://stable.melpa.org/packages/") package-archives)
+  (push '("nongnu" . "https://elpa.nongnu.org/nongnu/") package-archives)
+#+end_src
+
+** Change priorities for the repo list
+#+begin_src emacs-lisp
+  (setq package-archive-priorities
+      '(("melpa-stable" . 100)
+        ("gnu" . 50)
+        ("nongnu" . 50)
+        ("melpa" . 0)))
+#+end_src
+
+** Misc packaging settings
+Use use-package menu
+#+begin_src emacs-lisp
+  (setq-default use-package-enable-imenu-support t)
+#+end_src
+
+Invoke use-package
+#+begin_src emacs-lisp
+  (require 'use-package)
+#+end_src
+
+Settings to ensure that "ensure" and "demand" are used with every package request. This saves us having to add it to every use-package block.
+#+begin_src emacs-lisp
+  (setopt use-package-always-ensure t)
+#+end_src
+
+Force packages to load immediately. This can be overriden afterwards.
+#+begin_src emacs-lisp
+  (setopt use-package-always-demand t)
+#+end_src
+
+** Start no-littering
+No-littering needs to be started early.
+#+begin_src emacs-lisp
+  (use-package no-littering)
+#+end_src
+* UI Settings
+Stuff that is related to the interface of Emacs itself.
+** Interface
+*** Removing things
+
+Don't show the splash screen.
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+#+end_src
+
+Clear the scratch buffer
+#+begin_src emacs-lisp
+  (setq initial-scratch-message nil)
+#+end_src
+
+Remove the tool bar
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+#+end_src
+
+When you perform a problematic operation, flash the screen instead of ringing the terminal bell.
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+#+end_src
+
+*** Modeline
+
+Do not show load average on the modeline
+#+begin_src emacs-lisp
+  (setopt display-time-default-load-average nil)
+#+end_src
+
+*** Exiting
+Ask to confirm before closing Emacs
+#+begin_src emacs-lisp
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
+
+Allow y/n instead of yes/no.
+#+begin_src emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+*** Fonts
+
+Set default to monospaced. Adwaita Sans/Mono chosen because of readability.
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :family "Adwaita Mono" :height 115)
+  (set-face-attribute 'variable-pitch nil :family "Adwaita Sans")
+  (set-face-attribute 'fixed-pitch nil :family "Adwaita Mono")
+#+end_src
+
+*** Theme
+#+begin_src emacs-lisp
+  (use-package emacs
+      :config
+      (load-theme 'modus-operandi))
+#+end_src
+
+*** Tab line
+Global tab line mode. Taken from: https://gist.githubusercontent.com/satran/95195fc86289dcf05cc8f66c363edb36/raw/dc773c553d9055b3ecfc063c6d7d640788ac66b4/tabline.el
+
+#+begin_src emacs-lisp
+    ;; Taken from https://andreyor.st/posts/2020-05-10-making-emacs-tabs-look-like-in-atom/
+  ;; https://github.com/andreyorst/dotfiles/blob/740d346088ce5a51804724659a895d13ed574f81/.config/emacs/README.org#tabline
+
+  (defun my/set-tab-theme ()
+    (let ((bg (face-attribute 'mode-line :background))
+          (fg (face-attribute 'default :foreground))
+  	(hg (face-attribute 'default :background))
+          (base (face-attribute 'mode-line :background))
+          (box-width (/ (line-pixel-height) 4)))
+      (set-face-attribute 'tab-line nil
+  			:background base
+  			:foreground fg
+  			:height 0.8
+  			:inherit nil
+  			:box (list :line-width -1 :color base)
+  			)
+      (set-face-attribute 'tab-line-tab nil
+  			:foreground fg
+  			:background bg
+  			:weight 'normal
+  			:inherit nil
+  			:box (list :line-width box-width :color bg))
+      (set-face-attribute 'tab-line-tab-inactive nil
+  			:foreground fg
+  			:background base
+  			:weight 'normal
+  			:inherit nil
+  			:box (list :line-width box-width :color base))
+      (set-face-attribute 'tab-line-highlight nil
+  			:foreground fg
+  			:background hg
+  			:weight 'normal
+  			:inherit nil
+  			:box (list :line-width box-width :color hg))
+      (set-face-attribute 'tab-line-tab-current nil
+  			:foreground fg
+  			:background hg
+  			:weight 'normal
+  			:inherit nil
+  			:box (list :line-width box-width :color hg))))
+
+  (defun my/tab-line-name-buffer (buffer &rest _buffers)
+    "Create name for tab with padding and truncation.
+
+  If buffer name is shorter than `tab-line-tab-max-width' it gets
+  centered with spaces, otherwise it is truncated, to preserve
+  equal width for all tabs.  This function also tries to fit as
+  many tabs in window as possible, so if there are no room for tabs
+  with maximum width, it calculates new width for each tab and
+  truncates text if needed.  Minimal width can be set with
+  `tab-line-tab-min-width' variable."
+    (with-current-buffer buffer
+      (let* ((window-width (window-width (get-buffer-window)))
+             (tab-amount (length (tab-line-tabs-window-buffers)))
+             (window-max-tab-width (if (>= (* (+ tab-line-tab-max-width 3) tab-amount) window-width)
+                                       (/ window-width tab-amount)
+                                     tab-line-tab-max-width))
+             (tab-width (- (cond ((> window-max-tab-width tab-line-tab-max-width)
+                                  tab-line-tab-max-width)
+                                 ((< window-max-tab-width tab-line-tab-min-width)
+                                  tab-line-tab-min-width)
+                                 (t window-max-tab-width))
+                           3)) ;; compensation for ' x ' button
+             (buffer-name (string-trim (buffer-name)))
+             (name-width (length buffer-name)))
+        (if (>= name-width tab-width)
+            (concat  " " (truncate-string-to-width buffer-name (- tab-width 2)) "…")
+          (let* ((padding (make-string (+ (/ (- tab-width name-width) 2) 1) ?\s))
+                 (buffer-name (concat padding buffer-name)))
+            (concat buffer-name (make-string (- tab-width (length buffer-name)) ?\s)))))))
+
+  (defun tab-line-close-tab (&optional e)
+    "Close the selected tab.
+
+  If tab is presented in another window, close the tab by using
+  `bury-buffer` function.  If tab is unique to all existing
+  windows, kill the buffer with `kill-buffer` function.  Lastly, if
+  no tabs left in the window, it is deleted with `delete-window`
+  function."
+    (interactive "e")
+    (let* ((posnp (event-start e))
+           (window (posn-window posnp))
+           (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+      (with-selected-window window
+        (let ((tab-list (tab-line-tabs-window-buffers))
+              (buffer-list (flatten-list
+                            (seq-reduce (lambda (list window)
+                                          (select-window window t)
+                                          (cons (tab-line-tabs-window-buffers) list))
+                                        (window-list) nil))))
+          (select-window window)
+          (if (> (seq-count (lambda (b) (eq b buffer)) buffer-list) 1)
+              (progn
+                (if (eq buffer (current-buffer))
+                    (bury-buffer)
+                  (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+                  (set-window-next-buffers window (delq buffer (window-next-buffers))))
+                (unless (cdr tab-list)
+                  (ignore-errors (delete-window window))))
+            (and (kill-buffer buffer)
+                 (unless (cdr tab-list)
+                   (ignore-errors (delete-window window)))))))))
+
+  (unless (version< emacs-version "27")
+    (use-package tab-line
+      :ensure nil
+      :hook (after-init . global-tab-line-mode)
+      :config
+
+      (defcustom tab-line-tab-min-width 10
+        "Minimum width of a tab in characters."
+        :type 'integer
+        :group 'tab-line)
+
+      (defcustom tab-line-tab-max-width 30
+        "Maximum width of a tab in characters."
+        :type 'integer
+        :group 'tab-line)
+
+      (setq tab-line-close-button-show t
+            tab-line-new-button-show nil
+            tab-line-separator ""
+            tab-line-tab-name-function #'my/tab-line-name-buffer
+            tab-line-right-button (propertize (if (char-displayable-p ?▶) " ▶ " " > ")
+                                              'keymap tab-line-right-map
+                                              'mouse-face 'tab-line-highlight
+                                              'help-echo "Click to scroll right")
+            tab-line-left-button (propertize (if (char-displayable-p ?◀) " ◀ " " < ")
+                                             'keymap tab-line-left-map
+                                             'mouse-face 'tab-line-highlight
+                                             'help-echo "Click to scroll left")
+            tab-line-close-button (propertize (if (char-displayable-p ?×) " × " " x ")
+                                              'keymap tab-line-tab-close-map
+                                              'mouse-face 'tab-line-close-highlight
+                                              'help-echo "Click to close tab"))
+
+      (my/set-tab-theme)
+
+      ;;(dolist (mode '(ediff-mode process-menu-mode term-mode vterm-mode))
+      ;;(add-to-list 'tab-line-exclude-modes mode))
+      (dolist (mode '(ediff-mode process-menu-mode))
+        (add-to-list 'tab-line-exclude-modes mode))
+      ))
+
+  (global-tab-line-mode t)
+
+#+end_src
+
+*** Cursor
+Set cursor type to bar.
+#+begin_src emacs-lisp
+  (setq-default cursor-type 'bar) 
+#+end_src
+
+** Scrolling
+
+Smooth scrolling
+#+begin_src emacs-lisp
+  (pixel-scroll-precision-mode)
+#+end_src
+
+Keep the point in the same screen position after scrolling.
+#+begin_src emacs-lisp
+  (setq-default scroll-preserve-screen-position t)
+#+end_src
+
+Set "no overlap" when scrolling with a "next screen" command. (Default was 2)
+#+begin_src emacs-lisp
+  (setq-default next-screen-context-lines 0)
+#+end_src
+** Cursor
+
+Steady cursor
+#+begin_src emacs-lisp
+  (blink-cursor-mode -1)
+#+end_src
+
+** Editing aids
+
+Turn on syntax highlighting whenever possible.
+#+begin_src emacs-lisp
+  (global-font-lock-mode t)
+#+end_src
+
+Visually indicate matching pairs of parentheses.
+#+begin_src emacs-lisp
+  (show-paren-mode t)
+#+end_src
+
+Steady cursor
+#+begin_src emacs-lisp
+  (blink-cursor-mode -1)
+#+end_src
+
+Show line numbers in programming mode. The second line sets a minimum width for this.
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+  (setopt display-line-numbers-width 3)
+#+end_src
+
+** Other
+Enable transient mark mode (read)
+#+begin_src emacs-lisp
+  (transient-mark-mode t) ; Enable transient mark mode (read)
+#+end_src
+
+* Editing
+** Directories
+When opening a file, start searching at the user's home directory.
+#+begin_src emacs-lisp
+  (setq default-directory "~/")
+#+end_src
+
+When saving a file in a directory that doesn't exist, offer to (recursively) create the file's parent directories.
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook
+          (lambda ()
+            (when buffer-file-name
+              (let ((dir (file-name-directory buffer-file-name)))
+                (when (and (not (file-exists-p dir))
+                           (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
+                  (make-directory dir t))))))
+#+end_src
+
+** Files
+When opening a file, always follow symlinks.
+#+begin_src emacs-lisp
+  (setq vc-follow-symlinks t)
+#+end_src
+
+When something changes a file, automatically refresh the buffer containing that file so they can't get out of sync.
+#+begin_src emacs-lisp
+  (global-auto-revert-mode t)
+#+end_src
+
+Call DELETE-TRAILING-WHITESPACE every time a buffer is saved.
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+ If some text is selected, and you type some text, delete the selected text and start inserting your typed text.
+ #+begin_src emacs-lisp
+   (delete-selection-mode t)
+ #+end_src
+
+  If you save a file that doesn't end with a newline, automatically append one.
+  #+begin_src emacs-lisp
+    (setq require-final-newline t)
+  #+end_src
+
+Do not assume sentences have two spaces after periods.
+#+begin_src emacs-lisp
+  (setq sentence-end-double-space nil)
+#+end_src
+
+*** Encoding
+
+Set default encoding to UTF-8
+#+begin_src emacs-lisp
+  (prefer-coding-system 'utf-8)
+#+end_src
+
+Set default language environment to UTF-8
+#+begin_src emacs-lisp
+  (set-language-environment 'utf-8)
+#+end_src
+
+*** Auto-generated files
+
+Do not create backup files.
+#+begin_src emacs-lisp
+  (setq make-backup-files nil)
+#+end_src
+
+Do not create lockfiles
+#+begin_src emacs-lisp
+  (setq create-lockfiles nil)
+#+end_src
+
+Save minubuffer history
+#+begin_src emacs-lisp
+  (savehist-mode)
+#+end_src
+
+Taken from Protesilaos. /By default, Emacs writes persistent customisations to the end of the user’s init file. These are encapsulated in a “custom” block. Emacs writes those whenever the user does something with M-x customize or related./
+
+We make the file disposable so that we don't need to worry about additions to our init.el file.
+#+begin_src emacs-lisp
+  (setq custom-file (make-temp-file "emacs-custom-"))
+#+end_src
+
+** Modes
+Set default mode for the *scratch* buffer
+#+begin_src emacs-lisp
+  (setopt initial-major-mode 'fundamental-mode)
+#+end_src
+
+** Autocomplete
+
+Enable automatic brackets pairing
+#+begin_src emacs-lisp
+  (electric-pair-mode t)
+  (setq show-paren-delay 0.0)
+#+end_src
+
+* Interfaces
+** Mouse
+When middle-clicking the mouse to yank from the clipboard, insert the text where point is, not where the mouse cursor is.
+#+begin_src emacs-lisp
+  (setq mouse-yank-at-point t)
+#+end_src
+
+Link scroll speed to how fast I moved the wheel.
+#+begin_src emacs-lisp
+   (setq  mouse-wheel-progressive-speed t)
+#+end_src
+
+What it says on the tim.
+#+begin_src emacs-lisp
+  (setq mouse-wheel-follow-mouse t)
+#+end_src
+
+** Keyboard
+*** Configuration
+
+Use C-x, C-c, C-v as cut, copy and paste
+#+begin_src emacs-lisp
+  (cua-mode)
+#+end_src
+
+* Modules
+** Org mode
+*** Directories
+
+Set default org directory.
+#+begin_src emacs-lisp
+  (setq-default org-directory "~/org")
+#+end_src
+
+Set default notes file
+#+begin_src emacs-lisp
+  (setq org-default-notes-file "~/org/notes.org")
+#+end_src
+
+Set org-agenda-files so that TODOs and others are shown in the agenda. I choose all org files because then I can add TODOs wherever I want. Source: https://stackoverflow.com/questions/11384516/how-to-make-all-org-files-under-a-folder-added-in-agenda-list-automatically
+#+begin_src emacs-lisp
+  (setq org-agenda-files '("~/org"))
+#+end_src
+
+*** Markup
+
+Hide emphasis markup
+#+begin_src emacs-lisp
+  (setq org-hide-emphasis-markers t)
+#+end_src
+
+Change - in lists to a cented dot
+#+begin_src emacs-lisp
+;; (font-lock-add-keywords 'org-mode
+;;                        '(("^ *\\([-]\\) "
+;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+#+end_src
+
+Replace the "..." at the end of a folded headline to "▼". Note the space at the beggining.
+#+begin_src emacs-lisp
+  (setq org-ellipsis " ▼")
+#+end_src
+
+Set a special face for quote and verse blocks.
+#+begin_src emacs-lisp
+  (setq org-fontify-quote-and-verse-blocks t)
+#+end_src
+
+*** Indentation
+
+Ensure text looks indented to align with the headline
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+end_src
+
+Set indentation level to 3. It was 4 before.
+#+begin_src emacs-lisp
+  (setq org-indent-indentation-per-level 3)
+#+end_src
+
+Do not hide leading stars.
+#+begin_src emacs-lisp
+  (setq org-hide-leading-stars nil)
+#+end_src
+
+*** Images
+
+Ensure images are displayed.
+#+begin_src emacs-lisp
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
+#+end_src
+
+*** Editing
+Catch invisible edits. From the manual:
+Sometimes you may inadvertently edit an invisible part of the buffer and be confused on what has been edited and how to undo the mistake. By default, Org prevents such edits for a limited set of user commands. Users can control which commands are affected by customizing org-fold-catch-invisible-edits-commands.
+
+The strategy used to decide if a given edit is dangerous is controlled by org-fold-catch-invisible-edits. See the docstring of this option on the available strategies. Set the option to nil to disable catching invisible edits completely.
+#+begin_src emacs-lisp
+  (setq org-fold-catch-invisible-edits 'show)
+#+end_src
+
+*** Keys
+
+Make hitting return while on a link follow the link.
+#+begin_src emacs-lisp
+  (setq org-return-follows-link t)
+#+end_src
+
+If Return is used in the middle of a line, do not spit that line.
+#+begin_src emacs-lisp
+  (setq org-M-RET-may-split-line '((default . nil)))
+#+end_src
+
+*** Text
+
+Reflow text to window size
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'visual-line-mode)
+#+end_src
+
+**** Blocks
+Copied from Protesilaos. Create specific source blocks
+
+#+begin_src emacs-lisp
+  (setq org-structure-template-alist
+      '(("s" . "src")
+        ("e" . "src emacs-lisp")
+        ("q" . "quote")))
+#+end_src
+
+**** Fonts
+Variable pitch mode to show Adwaita Sans
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+#+end_src
+
+*** Org capture
+Set a keybind for org capture.
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c c") #'org-capture)
+#+end_src
+
+Automatically edit the :LAST_EDITED: section of the drawer when an entry is edited.
+#+begin_src emacs-lisp
+  (defun my/org-enable-last-edited-tracking ()
+  (add-hook 'before-save-hook #'my/org-update-last-edited-property nil t))
+
+(add-hook 'org-mode-hook #'my/org-enable-last-edited-tracking)
+#+end_src
+
+Automatically travel to the end of the document in certain files.
+#+begin_src emacs-lisp
+    (defun my-org-goto-end-if-matching-file ()
+    "Go to end of buffer for specific org files."
+    (let ((file (buffer-file-name)))
+      (when (and file
+                 (derived-mode-p 'org-mode)
+                 (or (string-match "records\\.org\\'" file)
+                     (string-match "meetings\\.org\\'" file)
+                     (string-match "quotes\\.org\\'" file)))
+        (goto-char (point-max)))))
+
+  (add-hook 'org-mode-hook #'my-org-goto-end-if-matching-file)
+#+end_src
+*** Templates
+Set our templates and where they go.
+#+begin_src emacs-lisp
+            (setq org-capture-templates
+                       '(("w" "Work-related TODO task"
+            		 entry
+            		 (file "~/org/work_todo.org")
+                         "* TODO %^{Brief description of the task}
+            :PROPERTIES:
+            :CREATED: %U
+            :END:
+           - Description: %^{Description of the task}
+           - Call/Jira reference number: %^{Call/Jira reference number}
+           - Contact: %^{Person to contact regarding this task}
+           - Deadline: %^{Deadline for the task}
+           - Notes: %^{Notes for the task}"
+            :kill-buffer t
+            :empty-lines 1
+            :jump-to-captured t)
+            	   ("m" "Meeting record entry"
+            		 entry
+            		 (file "~/org/meetings.org")
+                         "* %^{Brief description of the meeting}
+            :PROPERTIES:
+            :CREATED: %U
+            :END:
+           - Description: %^{Description of the meeting}
+           - Present: %^{Main people present}"
+            :kill-buffer t
+            :empty-lines 1
+            :jump-to-captured t)
+            	     ("p" "Personal TODO task"
+            		 entry
+            		 (file "~/org/personal_todo.org")
+                         "* TODO %^{Brief description of the task}
+            :PROPERTIES:
+            :CREATED: %U
+            :END:
+           - Deadline: %^{Deadline for the task}
+           - Notes: %^{Notes for the task}"
+            :kill-buffer t
+            :empty-lines 1
+            :jump-to-captured t)
+            	     ("r" "Insert a record entry"
+            		 entry
+            		 (file "~/org/records.org")
+                         "* %^{Brief description of the event}
+            :PROPERTIES:
+            :CREATED: %U
+            :LAST_EDITED: %U
+            :END:"
+            :kill-buffer t
+            :empty-lines 1
+    	:jump-to-captured t)
+            	     ))
+#+end_src
+
+** Dired
+
+Add file sizes in human-readable units (KB, MB, etc) to dired buffers.
+#+begin_src emacs-lisp
+  (setq-default dired-listing-switches "-alh")
+#+end_src
+
+When you first call `find-file' (C-x C-f by default), you do not need to clear the existing file path before adding the new one. Just start typing the whole path and Emacs will "shadow" the current one.  For example, you are at ~/Documents/notes/file.txt and you want to go to ~/.emacs.d/init.el: type the latter directly and Emacs will take you there. (Taken from Protesilaos)
+#+begin_src emacs-lisp
+  (file-name-shadow-mode 1)
+#+end_src
+
+This works with `file-name-shadow-mode' enabled.  When you are in a sub-directory and use, say, `find-file' to go to your home '~/' or root '/' directory, Vertico will clear the old path to keep only your current input. (Taken from Protesilaos).
+#+begin_src emacs-lisp
+  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+#+end_src
+
+** Isearch
+Isearch is already included with Emacs. This simply adds a counter next to the isearch prompt.
+#+begin_src emacs-lisp
+  (use-package isearch
+  :ensure nil
+  :demand t
+  :config
+  (setq isearch-lazy-count t)
+  (setq lazy-count-prefix-format "(%s/%s) ")
+  (setq lazy-count-suffix-format nil))
+#+end_src
+
+Cancel isearch when C-g is used instead of resuming the search from the previous succesful match.
+#+begin_src emacs-lisp
+;  (use-package isearch
+;  :ensure nil
+;  :demand t
+;  :bind
+;  ( :map isearch-mode-map
+;   ("C-g" . isearch-cancel) ; instead of `isearch-abort')))
+#+end_src
+
+Open files with the default application.
+#+begin_src emacs-lisp
+(setq dired-guess-shell-alist-user
+      '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open")
+        ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv" "xdg-open")
+		(".*" "xdg-open")))
+#+end_src
+** Which-key
+
+Make sure which-key is enabled
+#+begin_src emacs-lisp
+  (use-package which-key
+      :config
+      (which-key-mode))
+#+end_src
+
+Set which-key separator to " ".
+#+begin_src emacs-lisp
+  (setq which-key-separator "  ")
+#+end_src
+
+Set maximum lenght of description to 40 characters.
+#+begin_src emacs-lisp
+  (setq which-key-max-description-length 40)
+#+end_src
+
+
+** Vertico
+Vertical completion UI that uses the default completion system. It's what Protesilaos uses.
+
+#+begin_src emacs-lisp
+    ;; Enable Vertico.
+  (use-package vertico
+    ;; :custom
+    ;; (vertico-scroll-margin 0) ;; Different scroll margin
+    ;; (vertico-count 20) ;; Show more candidates
+    ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+    ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    :init
+    (vertico-mode))
+
+  ;; Emacs minibuffer configurations.
+  (use-package emacs
+    :custom
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Hide commands in M-x which do not work in the current mode.  Vertico
+    ;; commands are hidden in normal buffers. This setting is useful beyond
+    ;; Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties
+     '(read-only t cursor-intangible t face minibuffer-prompt)))
+
+#+end_src
+** Org-srs
+*** Ensure fsrs is installed (as it's a dependency of org-srs)
+#+begin_src emacs-lisp
+  (use-package fsrs
+  :vc (:url "https://github.com/open-spaced-repetition/lisp-fsrs.git"
+       :rev :newest)
+  :defer t)
+#+end_src
+
+*** Ensure org-srs is installed. Basic configuration
+#+begin_src emacs-lisp
+  (use-package org-srs
+  :vc (:url "https://github.com/bohonghuang/org-srs.git"
+       :rev :newest)
+  :defer t
+  :hook (org-mode . org-srs-embed-overlay-mode)
+  :bind (:map org-mode-map
+         ("<f5>" . org-srs-review-rate-easy)
+         ("<f6>" . org-srs-review-rate-good)
+         ("<f7>" . org-srs-review-rate-hard)
+         ("<f8>" . org-srs-review-rate-again)))
+#+end_src
+
+** Org-download
+Ensure org-download is installed and configure default directory.
+#+begin_src emacs-lisp
+  (use-package org-download
+    :config
+    (add-hook 'dired-mode-hook 'org-download-enable)
+    (setq-default org-download-image-dir "~/org/images"))
+#+end_src
+
+** Doom modeline
+Ensure doom modeline is installed and activated.
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+  (setq doom-modeline-icon nil)
+#+end_src
+
+** Elfeed
+RSS reader in emacs
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :config
+    (global-set-key (kbd "C-x w") 'elfeed)
+    (setq elfeed-feeds
+  '("inserturlhere"
+  )))
+#+end_src
+
+** Marginalia
+Adds annotations to the side of completion candidates. Used by Protesilaos.
+#+begin_src emacs-lisp
+  ;;; Detailed completion annotations (marginalia.el)
+(use-package marginalia
+  :hook (after-init . marginalia-mode)
+  :config
+  (setq marginalia-max-relative-age 0)) ; absolute time
+#+end_src
+
+** Breadcrumbs
+Protesilaos uses it. Display contextual informatin about the current heading or code definition in the header line.
+#+begin_src emacs-lisp
+  (use-package breadcrumb
+  :ensure t
+  :functions (prot/breadcrumb-local-mode)
+  :hook ((text-mode prog-mode) . prot/breadcrumb-local-mode)
+  :config
+  (setq breadcrumb-project-max-length 0.5)
+  (setq breadcrumb-project-crumb-separator "/")
+  (setq breadcrumb-imenu-max-length 1.0)
+  (setq breadcrumb-imenu-crumb-separator " > ")
+
+  (defun prot/breadcrumb-local-mode ()
+    "Enable `breadcrumb-local-mode' if the buffer is visiting a file."
+    (when buffer-file-name
+      (breadcrumb-local-mode 1))))
+#+end_src
