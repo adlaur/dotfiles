@@ -9,14 +9,14 @@ icons = "awesome6"
 [[block]]
 block = "notify"
 driver = "swaync"
-format = " $icon {($notification_count.eng(w:1)) |}"
+format = "$icon {($notification_count.eng(w:1)) |}"
 [[block.click]]
 button = "left"
 action = "show"
 
 [[block]]
 block = "keyboard_layout"
-format = " $layout"
+format = "$layout"
 driver = "sway"
 [block.mappings]
 "English (UK)" = "en"
@@ -25,11 +25,11 @@ driver = "sway"
 [[block]]
 block = "sound"
 driver = "pulseaudio"
-format = " $icon $output_name{ $volume|} "
+format = "$output_name{$volume|}"
 step_width = 1
 [block.mappings]
-"alsa_output.usb-C-Media_Electronics_Inc._JPL-500S-USB-00.analog-stereo" = "Headphones"
-"alsa_output.pci-0000_00_1f.3.analog-stereo" = "Internal"
+"alsa_output.usb-C-Media_Electronics_Inc._JPL-500S-USB-00.analog-stereo" = ""
+"alsa_output.pci-0000_00_1f.3.analog-stereo" = ""
 "auto_null" = "None"
 
 [[block]]
@@ -42,7 +42,7 @@ format = "$icon"
 
 [[block]]
 block = "backlight"
-format = "$icon"
+format = "$icon" 
 device = "intel_backlight"
 step_width = 1
 
